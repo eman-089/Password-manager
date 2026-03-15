@@ -1,0 +1,1 @@
+pwd = input("what is the master password?")
