@@ -1,4 +1,7 @@
+import base64
 from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.hazmat.primitives import hashes
 
 
 '''
@@ -10,6 +13,14 @@ def write_key():
 
 # write_key()
 
+def derive_key(master_pwd: str, salt: bytes) -> bytes:
+    kdf = PBKDF2HMAC(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=salt,
+        iterations=480_000,
+    )
+    return base64.urlsafe_b64encode(kdf.derive(master_pwd.encode()))
 
 def load_key():
     file = open("key.key", "rb")
